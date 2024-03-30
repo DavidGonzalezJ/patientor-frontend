@@ -15,11 +15,23 @@ const PatientDeatils = () => {
     if(patient)
         return (
             <>
-                <h3>{patient?.name} ({patient?.gender})</h3>
+                <h2>{patient.name} ({patient.gender})</h2>
                 <p>
-                    ssh: {patient?.ssn}<br/>
-                    occupation: {patient?.occupation}
+                    ssh: {patient.ssn}<br/>
+                    occupation: {patient.occupation}
                 </p>
+                <h3>Entries</h3>
+                {patient.entries.map(entry => {
+                    return (
+                        <div key={entry.id}>
+                            <p>{entry.date} <i>{entry.description}</i></p>
+                            <ul key={entry.id}>
+                                {entry.diagnosisCodes?.map(code =>
+                                    <li key={code}>{code}</li>)}
+                            </ul>
+                        </div>
+                    );
+                })}
             </>
         );
 
