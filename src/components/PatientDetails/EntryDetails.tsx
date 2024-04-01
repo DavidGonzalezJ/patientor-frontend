@@ -8,7 +8,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const HospitalEntryComp = ({entry}: {entry: HospitalEntry}) => {
     return (
-        <div style={{ border: '1px solid black', borderRadius: '5px', padding: '10px' }}>
+        <div style={{ border: '1px solid black', borderRadius: '5px' }}>
             <p>{entry.date} <LocalHospitalIcon/></p>
             <p><i>{entry.description}</i></p>
             <ul>
@@ -23,7 +23,7 @@ const HospitalEntryComp = ({entry}: {entry: HospitalEntry}) => {
 
 const OccupationalHealthcareEntryComp = ({entry}: {entry: OccupationalHealthcareEntry}) => {
     return (
-        <div style={{ border: '1px solid black', borderRadius: '5px', padding: '10px' }}>
+        <div style={{ border: '1px solid black', borderRadius: '5px' }}>
             <p>{entry.date} <HealingIcon/> <i>{entry.employerName}</i></p>
             <p><i>{entry.description}</i></p>
             <ul>
@@ -53,7 +53,7 @@ const HealthCheckEntryComp = ({entry}: {entry: HealthCheckEntry}) => {
     }
 
     return (
-        <div style={{ border: '1px solid black', borderRadius: '5px', padding: '10px' }}>
+        <div style={{ border: '1px solid black', borderRadius: '5px' }}>
             <p>{entry.date} <MedicalInformationIcon/></p>
             <p><i>{entry.description}</i></p>
             <p><FavoriteIcon sx={sx}/></p>

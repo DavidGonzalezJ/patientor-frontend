@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Patient } from "../../types";
+import { EntryWithoutId, Patient } from "../../types";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import EntryDeatils from "./EntryDetails";
+import NewEntryForm from "./NewEntryForm";
 
-const PatientDeatils = () => {
+const PatientDeatils = ({handleNewEntry}:{handleNewEntry:(id:string, entry:EntryWithoutId)=>void}) => {
     const [patient, setPatient] = useState<Patient>();
     const  id  = useParams().id || "";
 
@@ -14,6 +15,12 @@ const PatientDeatils = () => {
                 setPatient(res);
             });
     }, []);
+
+    const handleNewEntryAndRefresh = (id:string, entry:EntryWithoutId) => {
+        handleNewEntry(id,entry);
+        patientService.getById(id)
+            .then(res => setPatient(res));
+    };
     
     if(patient)
         return (
@@ -27,6 +34,7 @@ const PatientDeatils = () => {
                 {patient.entries.map(entry => {
                     return <EntryDeatils key={entry.id} entry={entry}/>;
                 })}
+                <NewEntryForm handleNewEntry={handleNewEntryAndRefresh}/>
             </>
         );
 

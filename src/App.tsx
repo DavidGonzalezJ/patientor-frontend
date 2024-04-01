@@ -4,14 +4,31 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
+import { Patient, EntryWithoutId } from "./types";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
 import PatientDeatils from "./components/PatientDetails";
 
+const Notification = ({msg}:{msg:string}) => {
+  if(!msg) return null;
+  return (
+    <div style={{
+      border: '2px solid red',
+      borderRadius: '10px',
+      color: 'red',
+      backgroundColor: 'rgba(255, 0, 0, 0.1)',
+      padding: '10px',
+    }}>
+      {msg}
+    </div>
+  );
+
+};
+
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -22,6 +39,18 @@ const App = () => {
     };
     void fetchPatientList();
   }, []);
+
+  const addNewEntry = (id:string, entry:EntryWithoutId) => {
+    patientService.addEntry(id,entry)
+    .then(_res => {
+      patientService.getAll()
+      .then(patients => setPatients(patients));
+    })
+    .catch(error => {
+      setMessage(error.response.data);
+      setTimeout(()=> setMessage(''), 3000);
+    });
+  };
   
   return (
     <div className="App">
@@ -36,8 +65,9 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
-            <Route path="/:id" element={<PatientDeatils/>} />
+            <Route path="/:id" element={<PatientDeatils handleNewEntry={addNewEntry}/>} />
           </Routes>
+          <Notification msg={message}/>
         </Container>
       </Router>
     </div>
